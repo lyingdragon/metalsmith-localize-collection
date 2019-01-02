@@ -1,3 +1,5 @@
+var debug = require('debug')('metalsmith-localize-collections');
+
 'use stritc';
 
 module.exports = function (name) {
@@ -28,6 +30,19 @@ module.exports = function (name) {
     }
 
     collection.forEach(workFile);
+
+    // update previous and next depending on new collections
+    metadata.locales.forEach(function (locale) {
+      var collection = collections[name + '_' + locale];
+      collection.forEach(function(file, i){
+        var last = collection.length - 1;
+        debug('adding metadata: %s', file.title);
+        if (0 != i) file.previous = collection[i-1];
+        else file.previous = null;
+        if (last != i) file.next = collection[i+1];
+        else file.next = null;
+      });
+    });
 
     callback();
   };
