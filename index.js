@@ -34,6 +34,9 @@ module.exports = function (name) {
     // update previous and next depending on new collections
     metadata.locales.forEach(function (locale) {
       var collection = collections[name + '_' + locale];
+      if (!collection)
+	return;
+ 
       collection.forEach(function(file, i){
         var last = collection.length - 1;
         debug('adding metadata: %s', file.title);
